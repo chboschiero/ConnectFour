@@ -1,9 +1,8 @@
 
 public class Board extends ConnectFour {
-	private static final int width = 7;
-	private static final int height = 6;
+	
+	
 	private char[][] board = new char[height][width];
-	private static final int maxMoves = height * width;
 	
 	private static boolean pl1 = true;
 	private static boolean pl2 = false;
@@ -25,7 +24,11 @@ public class Board extends ConnectFour {
      		System.out.println();
 			
 		}
+        System.out.println();
+        System.out.println("Player " + player + ", it's your turn:");
 	}
+	
+	// visualizzare la nuova griglia dopo ogni mossa
 	
 	public void visualize() {
 		System.out.println();
@@ -45,7 +48,7 @@ public class Board extends ConnectFour {
 	// posizionare la propria "pedina"
 	
 	public void add(int col, int player) {
-		for (int i = height - 1; i >= 0; i--) {
+			for (int i = height - 1; i >= 0; i--) {
 			if (board[i][col-1] == '.') {
 				if (player == 1) {
 					board[i][col-1] = 'X';
@@ -53,15 +56,27 @@ public class Board extends ConnectFour {
 				} else if (player == 2){
 					board[i][col-1] = 'O';
 					return;
-
 				}
 			
 			}
 			
-		}
-		
-		
+		}	
 	}
+	
+// stabilire se la giocata è consentita (colonna esistente e non piena)
+	
+	public boolean validatePlay(int col) {
+		if (col < 1 || col > width) {				
+			System.out.println("Bad input: choose another column");
+			return false;
+		} 
+		if (board[0][col - 1] == 'X' || board[0][col - 1] == 'O' ) {
+			System.out.println("Full column! Try another one");
+			return false;
+		} 
+		return true;
+	}
+
 	
 	// gestire turno dei giocatori 
 	
@@ -71,14 +86,6 @@ public class Board extends ConnectFour {
 		} else {
 			super.player = 1;
 		}
-	}
-
-	public int getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(int player) {
-		this.player = player;
 	}
 
 

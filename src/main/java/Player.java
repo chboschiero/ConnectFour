@@ -1,11 +1,11 @@
 
-public class Player {
-	private static boolean win = true; // finché è true si può continuare a giocare
+public class Player extends ConnectFour {
+	
 	private static boolean pl1 = true;
 	private static boolean pl2 = false;
 	
 
-		
+
 // stabilire chi ha vinto (si chiamerà alla fine del metodo che rileva un Forza4)
 	
 	public void win(int player) {
