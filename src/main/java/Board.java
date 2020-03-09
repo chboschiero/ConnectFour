@@ -1,25 +1,28 @@
 
 public class Board extends ConnectFour {
 	
+	private static final int width = 7;
+	private static final int height = 6;
+
 	
-	private char[][] board = new char[height][width];
+	private static int lastRow = 0;
+	private static int lastCol = 0;
+
+	private static boolean win = false; // finché è false si può continuare a giocare					
+	private static int player = 1;
 	
-	private static boolean pl1 = true;
-	private static boolean pl2 = false;
-	
-	private int player = 1;
 
 	// visualizzare la griglia 
 	
 	public void newGrid() {
-		for (int col = 0; col < width; col++) {
+		for (int col = 0; col < getWidth(); col++) {
         	System.out.print(col+1);
         }
         System.out.println();
-        for (int i = 0; i < height; i++) {
-     		for (int j = 0; j < width; j++) {
-     			board[i][j] = '.' ;
-     			System.out.print(board[i][j]);
+        for (int i = 0; i < getHeight(); i++) {
+     		for (int j = 0; j < getWidth(); j++) {
+     			grid[i][j] = '.' ;
+     			System.out.print(grid[i][j]);
 			} 
      		System.out.println();
 			
@@ -32,13 +35,13 @@ public class Board extends ConnectFour {
 	
 	public void visualize() {
 		System.out.println();
-		for (int col = 0; col < width; col++) {
+		for (int col = 0; col < getWidth(); col++) {
         	System.out.print(col+1);
         }
         System.out.println();
-        for (int i = 0; i < height; i++) {
-     		for (int j = 0; j < width; j++) {
-     			System.out.print(board[i][j]);
+        for (int i = 0; i < getHeight(); i++) {
+     		for (int j = 0; j < getWidth(); j++) {
+     			System.out.print(grid[i][j]);
 			} 
      		System.out.println();
 			
@@ -48,29 +51,30 @@ public class Board extends ConnectFour {
 	// posizionare la propria "pedina"
 	
 	public void add(int col, int player) {
-			for (int i = height - 1; i >= 0; i--) {
-			if (board[i][col-1] == '.') {
-				if (player == 1) {
-					board[i][col-1] = 'X';
+			for (int i = getHeight() - 1; i >= 0; i--) {
+				if (grid[i][col-1] == '.') {
+					if (player == 1) {
+						grid[i][col-1] = 'X';
+					} else if (player == 2){
+						grid[i][col-1] = 'O';
+					}
+					lastRow = i;
+					lastCol = col - 1;
 					return;
-				} else if (player == 2){
-					board[i][col-1] = 'O';
-					return;
+				
 				}
 			
-			}
-			
-		}	
+			}	
 	}
 	
 // stabilire se la giocata è consentita (colonna esistente e non piena)
 	
-	public boolean validatePlay(int col) {
-		if (col < 1 || col > width) {				
-			System.out.println("Bad input: choose another column");
+	public boolean checkMove(int col) {
+		if (col < 1 || col > getWidth()) {				
+			System.out.println("Bad input: choose a column from 1 to 7");
 			return false;
 		} 
-		if (board[0][col - 1] == 'X' || board[0][col - 1] == 'O' ) {
+		if (grid[0][col - 1] != '.') {
 			System.out.println("Full column! Try another one");
 			return false;
 		} 
@@ -82,10 +86,49 @@ public class Board extends ConnectFour {
 	
 	public void flipPlayer(int player) {
 		if (player == 1) {
-			super.player = 2;
+			setPlayer(2);
 		} else {
-			super.player = 1;
+			setPlayer(1);
 		}
+	}
+
+	public static int getHeight() {
+		return height;
+	}
+
+	public static int getWidth() {
+		return width;
+	}
+
+	public static int getPlayer() {
+		return player;
+	}
+
+	public static void setPlayer(int player) {
+		Board.player = player;
+	}
+
+	public static boolean isWin() {
+		return win;
+	}
+
+	public static void setWin(boolean win) {
+		Board.win = win;
+	}
+	public static int getLastRow() {
+		return lastRow;
+	}
+
+	public static void setLastRow(int lastRow) {
+		Board.lastRow = lastRow;
+	}
+
+	public static int getLastCol() {
+		return lastCol;
+	}
+
+	public static void setLastCol(int lastCol) {
+		Board.lastCol = lastCol;
 	}
 
 
