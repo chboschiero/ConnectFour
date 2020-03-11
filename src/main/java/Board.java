@@ -78,6 +78,15 @@ public class Board extends ConnectFour {
 		}
 		return true;
 	}
+	
+// stabilire chi sta vincendo
+	
+	public String[] whoWinning(Board curGrid) {
+		String[] winner = new String[2];
+		// chiamare checkWin (che sarà un booleano) 
+		return winner;
+		
+	}
 
 // stabilire se l'ultima mossa è vincente
 
