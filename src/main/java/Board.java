@@ -1,10 +1,10 @@
 
 public class Board extends ConnectFour {
 	
+	static char[][] grid = new char[Board.getHeight()][Board.getWidth()];
 	private static final int width = 7;
 	private static final int height = 6;
 
-	
 	private static int lastRow = 0;
 	private static int lastCol = 0;
 
@@ -12,7 +12,7 @@ public class Board extends ConnectFour {
 	private static int player = 1;
 	
 
-	// visualizzare la griglia 
+// visualizzare la griglia iniziale
 	
 	public void newGrid() {
 		for (int col = 0; col < getWidth(); col++) {
@@ -31,7 +31,7 @@ public class Board extends ConnectFour {
         System.out.println("Player " + player + ", it's your turn:");
 	}
 	
-	// visualizzare la nuova griglia dopo ogni mossa
+// visualizzare la nuova griglia dopo ogni mossa
 	
 	public void visualize() {
 		System.out.println();
@@ -48,7 +48,7 @@ public class Board extends ConnectFour {
 		}
 	}
 
-	// posizionare la propria "pedina"
+// posizionare la propria "pedina" e memorizzare ultima mossa
 	
 	public void add(int col, int player) {
 			for (int i = getHeight() - 1; i >= 0; i--) {
@@ -82,7 +82,7 @@ public class Board extends ConnectFour {
 	}
 
 	
-	// gestire turno dei giocatori 
+// gestire turno dei giocatori 
 	
 	public void flipPlayer(int player) {
 		if (player == 1) {
@@ -92,6 +92,9 @@ public class Board extends ConnectFour {
 		}
 	}
 
+
+// getter and setter
+	
 	public static int getHeight() {
 		return height;
 	}
@@ -115,6 +118,7 @@ public class Board extends ConnectFour {
 	public static void setWin(boolean win) {
 		Board.win = win;
 	}
+	
 	public static int getLastRow() {
 		return lastRow;
 	}
@@ -130,6 +134,16 @@ public class Board extends ConnectFour {
 	public static void setLastCol(int lastCol) {
 		Board.lastCol = lastCol;
 	}
+	
+	public static char[][] getGrid() {
+		return grid;
+	}
+	
+	public static void setGrid(char[][] grid) {
+		Board.grid = grid;
+	}
+
+
 
 
 }
