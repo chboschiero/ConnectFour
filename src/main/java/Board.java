@@ -32,7 +32,6 @@ public class Board extends ConnectFour {
 // visualizzare la nuova griglia dopo ogni mossa
 
 	public void visualize() {
-		System.out.println();
 		for (int col = 0; col < getWidth(); col++) {
 			System.out.print(col + 1);
 		}
@@ -83,6 +82,18 @@ public class Board extends ConnectFour {
 	
 	public String[] whoWinning(Board curGrid) {
 		String[] winner = new String[2];
+		boolean win = curGrid.checkWin(Board.getLastRow(), Board.getLastCol(), Board.getGrid());
+		if (win) {
+			winner[0] = "true";
+		} else {
+			winner[0] = "false";
+		}
+		if (Board.getPlayer() == 1) {
+			winner[1] = "X";
+		} else {
+			winner[1] = "O";
+		}
+		
 		// chiamare checkWin (che sarà un booleano) 
 		return winner;
 		
@@ -90,15 +101,14 @@ public class Board extends ConnectFour {
 
 // stabilire se l'ultima mossa è vincente
 
-	public void checkWin(int row, int col, char[][] curGrid) {
+	public boolean checkWin(int row, int col, char[][] curGrid) {
 		// verticale
 		if (row <= 2) {
 			if (curGrid[row][col] == curGrid[row + 1][col] && curGrid[row][col] == curGrid[row + 2][col]
 					&& curGrid[row][col] == curGrid[row + 3][col]) {
-				Board.setWin(true);
 				System.out.println();
 				System.out.println("Vertical win on column " + (col + 1));
-				return;
+				return true;
 			}
 
 		}
@@ -117,14 +127,14 @@ public class Board extends ConnectFour {
 				col++;
 			}
 			if (connect == 4) {
-				Board.setWin(true);
 				System.out.println();
 				System.out.println("Horizontal win on row " + (row + 1));
-				return;
+				return true;
 			}
 
 		}
 		// diagonale
+		return false;
 
 	}
 

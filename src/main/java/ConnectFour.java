@@ -14,11 +14,8 @@ public class ConnectFour {
 			if (col != 0) {
 				board.add(col, Board.getPlayer());
 				board.visualize();
-				if (turn >= 7) {
-					board.checkWin(Board.getLastRow(), Board.getLastCol(), Board.getGrid());
-				}
-				
-				if (Board.isWin()) {
+				String[] wins = board.whoWinning(board);
+				if (wins[0] == "true") {
 					board.win(Board.getPlayer());
 				} else {
 					turn++;
