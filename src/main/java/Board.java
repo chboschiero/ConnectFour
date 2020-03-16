@@ -1,15 +1,18 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board extends ConnectFour {
 
-	static char[][] grid = new char[Board.getHeight()][Board.getWidth()];
+	static String[][] grid = new String[Board.getHeight()][Board.getWidth()];
 	private static final int width = 7;
 	private static final int height = 6;
+	static int turn = 1;
 
 	private static int lastRow = 0;
 	private static int lastCol = 0;
 
-	private static boolean win = false; // finché è false si può continuare a giocare
 	private static int player = 1;
+	private static boolean win = false; // finché è false si può continuare a giocare
 
 // visualizzare la griglia iniziale
 
@@ -20,7 +23,7 @@ public class Board extends ConnectFour {
 		System.out.println();
 		for (int i = 0; i < getHeight(); i++) {
 			for (int j = 0; j < getWidth(); j++) {
-				grid[i][j] = '.';
+				grid[i][j] = ".";
 				System.out.print(grid[i][j]);
 			}
 			System.out.println();
@@ -49,11 +52,11 @@ public class Board extends ConnectFour {
 
 	public void add(int col, int player) {
 		for (int i = getHeight() - 1; i >= 0; i--) {
-			if (grid[i][col - 1] == '.') {
+			if (grid[i][col - 1] == ".") { // grid è un attributo della classe
 				if (player == 1) {
-					grid[i][col - 1] = 'X';
+					grid[i][col - 1] = "X";
 				} else if (player == 2) {
-					grid[i][col - 1] = 'O';
+					grid[i][col - 1] = "O";
 				}
 				lastRow = i;
 				lastCol = col - 1;
@@ -71,72 +74,182 @@ public class Board extends ConnectFour {
 			System.out.println("Bad input: choose a column from 1 to 7");
 			return false;
 		}
-		if (grid[0][col - 1] != '.') {
+		if (grid[0][col - 1] != ".") {
 			System.out.println("Full column! Try another one");
 			return false;
 		}
 		return true;
 	}
-	
-// stabilire chi sta vincendo
-	
-	public String[] whoWinning(Board curGrid) {
-		String[] winner = new String[2];
-		boolean win = curGrid.checkWin(Board.getLastRow(), Board.getLastCol(), Board.getGrid());
-		if (win) {
-			winner[0] = "true";
-		} else {
-			winner[0] = "false";
+
+// check della 
+
+	private String[] evaluateArray(String[] array) {
+		String[] s = { "false", "." };
+		if (array.length <= 3) {
+			return s;
 		}
-		if (Board.getPlayer() == 1) {
-			winner[1] = "X";
-		} else {
-			winner[1] = "O";
+		String tmp_element = array[0]; // istanziare array
+		int connect = 1;
+		for (int i = 1; i < array.length; i++) {
+			if (array[i] == tmp_element && tmp_element != ".") {
+				connect++;
+			} else {
+				tmp_element = array[i];
+				connect = 1;
+			}
+			if (connect == 4) {
+				s[0] = "true";
+				s[1] = tmp_element;
+				return s;
+			}
 		}
-		
-		// chiamare checkWin (che sarà un booleano) 
-		return winner;
-		
+		return s;
 	}
 
 // stabilire se l'ultima mossa è vincente
 
-	public boolean checkWin(int row, int col, char[][] curGrid) {
-		// verticale
-		if (row <= 2) {
-			if (curGrid[row][col] == curGrid[row + 1][col] && curGrid[row][col] == curGrid[row + 2][col]
-					&& curGrid[row][col] == curGrid[row + 3][col]) {
-				System.out.println();
-				System.out.println("Vertical win on column " + (col + 1));
-				return true;
+	public String[] checkWin() {
+		String[] arrayH = new String[Board.getWidth()];
+		for (int i = 0; i < Board.getHeight(); i++) {
+			for (int j = 0; j < arrayH.length; j++) {
+				arrayH[j] = grid[i][j];
+			}
+			String[] win = this.evaluateArray(arrayH);
+			if (win[0] == "true") {
+				System.out.println("Horizontal win");
+				return win;
+			}
+		}
+		String[] arrayV = new String[Board.getHeight()];
+		for (int i = 0; i < Board.getWidth(); i++) {
+			for (int j = 0; j < arrayV.length; j++) {
+				arrayV[j] = grid[j][i];
+			}
+			String[] win = this.evaluateArray(arrayV);
+			if (win[0] == "true") {
+				System.out.println("Vertical win");
+				return win;
+			}
+		}
+		
+		
+		for (int i = 0; i < Board.getHeight(); i++) {
+			List<String> candidate = new ArrayList<>();
+			int row = i;
+			int col = 0;
+			while (row <= 5 && col <= 6) {
+				candidate.add(grid[row][col]);
+				row++;
+				col++;
+			}
+			String[] arrayBs = new String[candidate.size()];
+			String[] win = this.evaluateArray(candidate.toArray(arrayBs));
+			if (win[0] == "true") {
+				System.out.println("Diagonal win");
+				return win;
+
+			}
+			
+		}
+		for (int i = 1; i < Board.getWidth(); i++) {
+			List<String> candidate = new ArrayList<>();
+			int row = 0;
+			int col = i;
+			while (row <= 5 && col <= 6) {
+				candidate.add(grid[row][col]);
+				row++;
+				col++;
+			}
+			String[] arrayBs = new String[candidate.size()];
+			String[] win = this.evaluateArray(candidate.toArray(arrayBs));
+			if (win[0] == "true") {
+				System.out.println("Diagonal win");
+				return win;
+
 			}
 
 		}
-		// orizzontale
-		col = 0;
-		char cur = curGrid[row][col];
-		int connect = 1;
-		for (int i = 0; i < Board.getWidth() - 1; i++) {
-			if (cur == curGrid[row][col + 1] && cur != '.') {
-				cur = curGrid[row][col + 1];
-				connect++;
-				col++;
-			} else {
-				cur = curGrid[row][col + 1];
-				connect = 1;
+		for (int i = Board.getHeight() - 1; i >= 0; i--) {
+			List<String> candidate = new ArrayList<>();
+			int row = i;
+			int col = 0;
+			while (row >= 0 && col <= 6) {
+				candidate.add(grid[row][col]);
+				row--;
 				col++;
 			}
-			if (connect == 4) {
-				System.out.println();
-				System.out.println("Horizontal win on row " + (row + 1));
-				return true;
+			String[] arrayS = new String[candidate.size()];
+			String[] win = this.evaluateArray(candidate.toArray(arrayS));
+			if (win[0] == "true") {
+				System.out.println("Diagonal win");
+				return win;
 			}
-
 		}
-		// diagonale
-		return false;
+		
+		for (int i = 1; i < Board.getWidth(); i++) {
+			List<String> candidate = new ArrayList<>();
+			int row = Board.getHeight() - 1;
+			int col = i;
+			while (row >= 0 && col <= 6) {
+				candidate.add(grid[row][col]);
+				row--;
+				col++;
+			}
+			String[] arrayS = new String[candidate.size()];
+			String[] win = this.evaluateArray(candidate.toArray(arrayS));
+			if (win[0] == "true") {
+				System.out.println("Diagonal win");
+				return win;
+			}
+		}
+
+		arrayV[0] = "false";
+		return arrayV;
 
 	}
+//		for (ciclo nelle colonne) {
+//			costruire il String[] della colonna
+//			passare il String[] della colonna al metodo private 
+//			se restituisce una win situation restituire la stringa[]
+//					if (s[0] == "true") {
+//						return s;
+//					}
+//		}
+
+//	public boolean checkWin2(int row, int col) {
+//		// verticale
+//		if (row <= 2) {
+//			if (grid[row][col] == grid[row + 1][col] && grid[row][col] == grid[row + 2][col]
+//					&& grid[row][col] == grid[row + 3][col]) {
+//				System.out.println();
+//				System.out.println("Vertical win on column " + (col + 1));
+//				return true;
+//			}
+//
+//		}
+//		// orizzontale
+//		col = 0;
+//		String cur = grid[row][col];
+//		int connect = 1;
+//		for (int i = 0; i < Board.getWidth() - 1; i++) {
+//			if (cur == grid[row][col + 1] && cur != ".") {
+//				cur = grid[row][col + 1];
+//				connect++;
+//				col++;
+//			} else {
+//				cur = grid[row][col + 1];
+//				connect = 1;
+//				col++;
+//			}
+//			if (connect == 4) {
+//				System.out.println();
+//				System.out.println("Horizontal win on row " + (row + 1));
+//				return true;
+//			}
+//
+//		}
+//		// diagonale
+//		return false;
 
 // stabilire chi ha vinto (si chiamerà  alla fine del metodo che rileva un Forza4)
 
@@ -162,8 +275,6 @@ public class Board extends ConnectFour {
 		}
 	}
 
-	
-	
 // getter and setter
 
 	public static int getHeight() {
@@ -182,14 +293,6 @@ public class Board extends ConnectFour {
 		Board.player = player;
 	}
 
-	public static boolean isWin() {
-		return win;
-	}
-
-	public static void setWin(boolean win) {
-		Board.win = win;
-	}
-
 	public static int getLastRow() {
 		return lastRow;
 	}
@@ -206,12 +309,27 @@ public class Board extends ConnectFour {
 		Board.lastCol = lastCol;
 	}
 
-	public static char[][] getGrid() {
+	public static String[][] getGrid() {
 		return grid;
 	}
 
-	public static void setGrid(char[][] grid) {
+	public static void setGrid(String[][] grid) {
 		Board.grid = grid;
 	}
 
+	public static boolean isWin() {
+		return win;
+	}
+
+	public static void setWin(boolean win) {
+		Board.win = win;
+	}
+
+	public static void setTurn(int turn) {
+		Board.turn = turn;
+	}
+
+	public static int getTurn() {
+		return turn;
+	}
 }
