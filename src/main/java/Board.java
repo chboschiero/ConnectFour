@@ -81,7 +81,7 @@ public class Board extends ConnectFour {
 		return true;
 	}
 
-// check della 
+// check del connect sul vettore creato
 
 	private String[] evaluateArray(String[] array) {
 		String[] s = { "false", "." };
@@ -109,6 +109,7 @@ public class Board extends ConnectFour {
 // stabilire se l'ultima mossa è vincente
 
 	public String[] checkWin() {
+		// orizzontale
 		String[] arrayH = new String[Board.getWidth()];
 		for (int i = 0; i < Board.getHeight(); i++) {
 			for (int j = 0; j < arrayH.length; j++) {
@@ -120,6 +121,7 @@ public class Board extends ConnectFour {
 				return win;
 			}
 		}
+		// verticale
 		String[] arrayV = new String[Board.getHeight()];
 		for (int i = 0; i < Board.getWidth(); i++) {
 			for (int j = 0; j < arrayV.length; j++) {
@@ -131,8 +133,7 @@ public class Board extends ConnectFour {
 				return win;
 			}
 		}
-		
-		
+		// diagonale backslash
 		for (int i = 0; i < Board.getHeight(); i++) {
 			List<String> candidate = new ArrayList<>();
 			int row = i;
@@ -149,7 +150,7 @@ public class Board extends ConnectFour {
 				return win;
 
 			}
-			
+
 		}
 		for (int i = 1; i < Board.getWidth(); i++) {
 			List<String> candidate = new ArrayList<>();
@@ -169,6 +170,7 @@ public class Board extends ConnectFour {
 			}
 
 		}
+		// diagonale slash
 		for (int i = Board.getHeight() - 1; i >= 0; i--) {
 			List<String> candidate = new ArrayList<>();
 			int row = i;
@@ -185,7 +187,7 @@ public class Board extends ConnectFour {
 				return win;
 			}
 		}
-		
+
 		for (int i = 1; i < Board.getWidth(); i++) {
 			List<String> candidate = new ArrayList<>();
 			int row = Board.getHeight() - 1;
@@ -202,54 +204,12 @@ public class Board extends ConnectFour {
 				return win;
 			}
 		}
-
-		arrayV[0] = "false";
-		return arrayV;
+		
+		String[] noWin = {"false", "."};
+		return noWin;
 
 	}
-//		for (ciclo nelle colonne) {
-//			costruire il String[] della colonna
-//			passare il String[] della colonna al metodo private 
-//			se restituisce una win situation restituire la stringa[]
-//					if (s[0] == "true") {
-//						return s;
-//					}
-//		}
 
-//	public boolean checkWin2(int row, int col) {
-//		// verticale
-//		if (row <= 2) {
-//			if (grid[row][col] == grid[row + 1][col] && grid[row][col] == grid[row + 2][col]
-//					&& grid[row][col] == grid[row + 3][col]) {
-//				System.out.println();
-//				System.out.println("Vertical win on column " + (col + 1));
-//				return true;
-//			}
-//
-//		}
-//		// orizzontale
-//		col = 0;
-//		String cur = grid[row][col];
-//		int connect = 1;
-//		for (int i = 0; i < Board.getWidth() - 1; i++) {
-//			if (cur == grid[row][col + 1] && cur != ".") {
-//				cur = grid[row][col + 1];
-//				connect++;
-//				col++;
-//			} else {
-//				cur = grid[row][col + 1];
-//				connect = 1;
-//				col++;
-//			}
-//			if (connect == 4) {
-//				System.out.println();
-//				System.out.println("Horizontal win on row " + (row + 1));
-//				return true;
-//			}
-//
-//		}
-//		// diagonale
-//		return false;
 
 // stabilire chi ha vinto (si chiamerà  alla fine del metodo che rileva un Forza4)
 
