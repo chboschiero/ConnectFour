@@ -5,7 +5,7 @@ public class ConnectFour {
 		try (Scanner scanner = new Scanner(System.in)) {
 			Board board = new Board();
 			
-			System.out.print("Who's Player 1? ");
+			System.out.print("Who's Player 1?");
 			String s1 = scanner.nextLine();
 			Player player1 = null;
 			if (s1.contentEquals("human")) {
