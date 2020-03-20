@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board extends ConnectFour {
+public class Board {
 
 	static String[][] grid = new String[Board.getHeight()][Board.getWidth()];
 	private static final int width = 7;
@@ -75,7 +75,10 @@ public class Board extends ConnectFour {
 			return false;
 		}
 		if (grid[0][col - 1] != ".") {
-			System.out.println("Full column! Try another one");
+			if (player == 1) {
+				System.out.println("Full column! Try another one");
+				return false;
+			} // else è l'autoplayer e se la colonna è piena ne sceglie un'altra ma non stampa 
 			return false;
 		}
 		return true;
@@ -88,7 +91,7 @@ public class Board extends ConnectFour {
 		if (array.length <= 3) {
 			return s;
 		}
-		String tmp_element = array[0]; // istanziare array
+		String tmp_element = array[0]; 
 		int connect = 1;
 		for (int i = 1; i < array.length; i++) {
 			if (array[i] == tmp_element && tmp_element != ".") {
@@ -204,12 +207,11 @@ public class Board extends ConnectFour {
 				return win;
 			}
 		}
-		
-		String[] noWin = {"false", "."};
+
+		String[] noWin = { "false", "." };
 		return noWin;
 
 	}
-
 
 // stabilire chi ha vinto (si chiamerà  alla fine del metodo che rileva un Forza4)
 
