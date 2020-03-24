@@ -3,13 +3,10 @@ import java.util.List;
 
 public class Board {
 
-	static String[][] grid = new String[Board.getHeight()][Board.getWidth()];
+	private String[][] grid = new String[Board.getHeight()][Board.getWidth()];
 	private static final int width = 7;
 	private static final int height = 6;
 	static int turn = 1;
-
-	private static int lastRow = 0;
-	private static int lastCol = 0;
 
 	private static int player = 1;
 	private static boolean win = false; // finché è false si può continuare a giocare
@@ -58,8 +55,6 @@ public class Board {
 				} else if (player == 2) {
 					grid[i][col - 1] = "O";
 				}
-				lastRow = i;
-				lastCol = col - 1;
 				return;
 
 			}
@@ -75,10 +70,7 @@ public class Board {
 			return false;
 		}
 		if (grid[0][col - 1] != ".") {
-			if (player == 1) {
-				System.out.println("Full column! Try another one");
-				return false;
-			} // else è l'autoplayer e se la colonna è piena ne sceglie un'altra ma non stampa 
+//			System.out.println("Full column! Try another one");
 			return false;
 		}
 		return true;
@@ -91,7 +83,7 @@ public class Board {
 		if (array.length <= 3) {
 			return s;
 		}
-		String tmp_element = array[0]; 
+		String tmp_element = array[0];
 		int connect = 1;
 		for (int i = 1; i < array.length; i++) {
 			if (array[i] == tmp_element && tmp_element != ".") {
@@ -120,7 +112,7 @@ public class Board {
 			}
 			String[] win = this.evaluateArray(arrayH);
 			if (win[0] == "true") {
-				System.out.println("Horizontal win");
+//				System.out.println("Horizontal win");
 				return win;
 			}
 		}
@@ -132,7 +124,7 @@ public class Board {
 			}
 			String[] win = this.evaluateArray(arrayV);
 			if (win[0] == "true") {
-				System.out.println("Vertical win");
+//				System.out.println("Vertical win");
 				return win;
 			}
 		}
@@ -149,7 +141,7 @@ public class Board {
 			String[] arrayBs = new String[candidate.size()];
 			String[] win = this.evaluateArray(candidate.toArray(arrayBs));
 			if (win[0] == "true") {
-				System.out.println("Diagonal win");
+//				System.out.println("Diagonal win");
 				return win;
 
 			}
@@ -167,7 +159,7 @@ public class Board {
 			String[] arrayBs = new String[candidate.size()];
 			String[] win = this.evaluateArray(candidate.toArray(arrayBs));
 			if (win[0] == "true") {
-				System.out.println("Diagonal win");
+//				System.out.println("Diagonal win");
 				return win;
 
 			}
@@ -186,7 +178,7 @@ public class Board {
 			String[] arrayS = new String[candidate.size()];
 			String[] win = this.evaluateArray(candidate.toArray(arrayS));
 			if (win[0] == "true") {
-				System.out.println("Diagonal win");
+//				System.out.println("Diagonal win");
 				return win;
 			}
 		}
@@ -203,7 +195,7 @@ public class Board {
 			String[] arrayS = new String[candidate.size()];
 			String[] win = this.evaluateArray(candidate.toArray(arrayS));
 			if (win[0] == "true") {
-				System.out.println("Diagonal win");
+//				System.out.println("Diagonal win");
 				return win;
 			}
 		}
@@ -213,7 +205,7 @@ public class Board {
 
 	}
 
-// stabilire chi ha vinto (si chiamerà  alla fine del metodo che rileva un Forza4)
+// stabilire chi ha vinto (si chiamerà alla fine del metodo che rileva un Forza4)
 
 	public void win(int player) {
 		if (player == 1) {
@@ -237,6 +229,20 @@ public class Board {
 		}
 	}
 
+// Constructor
+	
+	Board() {
+	}
+
+	public Board(String[][] curGrid) {
+		for (int i = 0; i < Board.getHeight(); i++) {
+			for (int j = 0; j < Board.getWidth(); j++) {
+				grid[i][j] = curGrid[i][j];
+			}
+		}
+
+	}
+	
 // getter and setter
 
 	public static int getHeight() {
@@ -255,28 +261,12 @@ public class Board {
 		Board.player = player;
 	}
 
-	public static int getLastRow() {
-		return lastRow;
+	public String[][] getGrid() {
+		return this.grid;
 	}
 
-	public static void setLastRow(int lastRow) {
-		Board.lastRow = lastRow;
-	}
-
-	public static int getLastCol() {
-		return lastCol;
-	}
-
-	public static void setLastCol(int lastCol) {
-		Board.lastCol = lastCol;
-	}
-
-	public static String[][] getGrid() {
-		return grid;
-	}
-
-	public static void setGrid(String[][] grid) {
-		Board.grid = grid;
+	public void setGrid(String[][] grid) {
+		this.grid = grid;
 	}
 
 	public static boolean isWin() {
@@ -294,4 +284,9 @@ public class Board {
 	public static int getTurn() {
 		return turn;
 	}
+	
+
 }
+
+
+

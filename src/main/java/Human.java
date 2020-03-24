@@ -2,6 +2,11 @@ import java.util.Scanner;
 
 public class Human extends Player {
 	
+	
+	Human(int role) {
+		super(role);
+	}
+
 	@Override
 	public int getMove(Board curGrid) {
 		boolean flag = false;

@@ -5,23 +5,26 @@ public class ConnectFour {
 		try (Scanner scanner = new Scanner(System.in)) {
 			Board board = new Board();
 			
-			System.out.print("Who's Player 1?");
+			System.out.print("Who's Player 1? ");
 			String s1 = scanner.nextLine();
 			Player player1 = null;
 			if (s1.contentEquals("human")) {
-				player1 = new Human();
+				player1 = new Human(1);
 			} else if (s1.contentEquals("dummy")) {
-				player1 = new Dummy();
+				player1 = new Dummy(1);
+			} else if (s1.contentEquals("lessdummy")) {
+				player1 = new LessDummy(1);
 			}
 			System.out.print("Who's Player 2? ");
 			String s2 = scanner.nextLine();
 			Player player2 = null;
 			if (s2.contentEquals("human")) {
-				player2 = new Human();
+				player2 = new Human(2);
 			}	else if (s2.contentEquals("dummy")) {
-				player2 = new Dummy();
+				player2 = new Dummy(2);
+			}	else if (s2.contentEquals("lessdummy")) {
+				player2 = new LessDummy(2);
 			}
-			
 			System.out.println();
 			System.out.println("Let's play! Choose a column from 1 to 7");
 			System.out.println();
