@@ -4,7 +4,7 @@ public class ConnectFour {
 	public static void main(String[] args) {
 		try (Scanner scanner = new Scanner(System.in)) {
 			Board board = new Board();
-			
+
 			System.out.print("Who's Player 1? ");
 			String s1 = scanner.nextLine();
 			Player player1 = null;
@@ -14,22 +14,26 @@ public class ConnectFour {
 				player1 = new Dummy(1);
 			} else if (s1.contentEquals("lessdummy")) {
 				player1 = new LessDummy(1);
+			} else if (s1.contentEquals("minmax")) {
+				player1 = new MinmaxPlayer(1);
 			}
 			System.out.print("Who's Player 2? ");
 			String s2 = scanner.nextLine();
 			Player player2 = null;
 			if (s2.contentEquals("human")) {
 				player2 = new Human(2);
-			}	else if (s2.contentEquals("dummy")) {
+			} else if (s2.contentEquals("dummy")) {
 				player2 = new Dummy(2);
-			}	else if (s2.contentEquals("lessdummy")) {
+			} else if (s2.contentEquals("lessdummy")) {
 				player2 = new LessDummy(2);
+			} else if (s2.contentEquals("minmax")) {
+				player2 = new MinmaxPlayer(2);
 			}
 			System.out.println();
 			System.out.println("Let's play! Choose a column from 1 to 7");
 			System.out.println();
 			board.newGrid();
-			
+
 			while (!Board.isWin() && turn < Board.getWidth() * Board.getHeight() + 1) {
 				System.out.println("Player " + Board.getPlayer() + ", it's your turn:");
 				int col = -1;

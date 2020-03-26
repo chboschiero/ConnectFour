@@ -2,7 +2,6 @@ import java.util.Scanner;
 
 public class Human extends Player {
 	
-	
 	Human(int role) {
 		super(role);
 	}

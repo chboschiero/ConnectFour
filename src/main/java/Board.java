@@ -6,6 +6,7 @@ public class Board {
 	private String[][] grid = new String[Board.getHeight()][Board.getWidth()];
 	private static final int width = 7;
 	private static final int height = 6;
+	private static final int maxMoves = height * width;
 	static int turn = 1;
 
 	private static int player = 1;
@@ -283,6 +284,10 @@ public class Board {
 
 	public static int getTurn() {
 		return turn;
+	}
+
+	public static int getMaxmoves() {
+		return maxMoves;
 	}
 	
 
