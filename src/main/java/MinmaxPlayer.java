@@ -1,6 +1,7 @@
+import java.util.Random;
 
 public class MinmaxPlayer extends Player {
-	private static final int DEFAULT_MAX_DEPTH = 2;
+	private static final int DEFAULT_MAX_DEPTH = 6;
 	private int maxDepth;
 
 	MinmaxPlayer(int role) {
@@ -15,84 +16,83 @@ public class MinmaxPlayer extends Player {
 
 	@Override
 	int getMove(Board curGrid) {
-		int depth = 0;
+		float depth = 0;
+		int turn = Board.getTurn();
 		int bestCol = -1;
-		int maxU = Integer.MIN_VALUE;
+		float maxU = Integer.MIN_VALUE;
 		for (int i = 1; i <= Board.getWidth(); i++) {
 			Board test = new Board(curGrid.getGrid());
 			if (test.checkMove(i)) {
 				test.add(i, Player.getMyRole());
-				int[] result = this.maximize(test, depth, maxU, i);
-				if (result[0] > maxU) {
-					maxU = result[1];
-					bestCol = result[0];
-				}
-				
+				float result = this.minimize(test, depth, turn);
+				if (result > maxU) {
+					bestCol = i;
+					maxU = result;
+				} 
 			}
 		}
 		System.out.println(bestCol);
 		return bestCol;
 	}
 
-	public int[] maximize(Board curGrid, int depth, int maxU, int col) {
+	public float maximize(Board curGrid, float depth, int turn) {
+		turn ++;
 		depth++;
-		int curU = Integer.MIN_VALUE;
+		float maxU = Integer.MIN_VALUE;
 		String[] wins = curGrid.checkWin();
-		if (wins[0] == "true" || depth == maxDepth) {
-			curU = this.calculateUtility(curGrid);
-			int[] result = { col, curU };
-			return result;
-		} else {
-			for (int i = 1; i <= Board.getWidth(); i++) {
-				Board test = new Board(curGrid.getGrid());
-				if (test.checkMove(i)) {
-					test.add(i, Player.getOtherRole());
-					int[] r = this.minimize(test, depth, curU, i);
-					if (r[1] > curU) {
-						col = r[0];
-						curU = r[1];
-					}
-				}
-			}
-			int[] result = { col, maxU };
-			return result;
-
-		}
-
-	}
-
-	public int[] minimize(Board curGrid, int depth, int maxU, int col) {
-		depth++;
-		int curU = Integer.MAX_VALUE;
-		String[] wins = curGrid.checkWin();
-		if (wins[0] == "true" || depth == maxDepth) {
-			curU = this.calculateUtility(curGrid);
-			int[] result = { col, curU };
-			return result;
+		if (wins[0] == "true" || depth == maxDepth || turn == Board.getMaxMoves()) {
+			maxU = this.calculateUtility(curGrid, depth);
+			return maxU;
 		} else {
 			for (int i = 1; i <= Board.getWidth(); i++) {
 				Board test = new Board(curGrid.getGrid());
 				if (test.checkMove(i)) {
 					test.add(i, Player.getMyRole());
-					int[] r = this.maximize(test, depth, curU, i);
-					if (r[1] < curU) {
-						col = r[0];
-						curU = r[1]; //prima era maxU
+					float r = this.minimize(test, depth, turn);
+					if (r > maxU) {
+						maxU = r;
 					}
 				}
 			}
-			int[] result = { col, maxU };
-			return result;
+			return maxU;
+
+		}
+
+	}
+
+	public float minimize(Board curGrid, float depth, int turn) {
+		turn++;
+		depth++;
+		float minU = Integer.MAX_VALUE;
+		String[] wins = curGrid.checkWin();
+		if (wins[0] == "true" || depth == maxDepth || turn == Board.getMaxMoves()) {
+			minU = this.calculateUtility(curGrid, depth);
+			return minU;
+		} else {
+			for (int i = 1; i <= Board.getWidth(); i++) {
+				Board test = new Board(curGrid.getGrid());
+				if (test.checkMove(i)) {
+					test.add(i, Player.getOtherRole());
+					float r = this.maximize(test, depth, turn);
+					if (r < minU) {
+						minU = r;
+					}
+				}
+			}
+	
+			return minU;
 		}
 	}
 
-	public int calculateUtility(Board curGrid) {
+	public float calculateUtility(Board curGrid, float depth) {
 		String[] wins = curGrid.checkWin();
 		if (wins[0] == "true") {
 			if (wins[1] == "X" && Player.getMyRole() == 1) {
-				return 1;
+				return 1/depth;
+			} else if (wins[1] == "O" && Player.getMyRole() == 2) {
+				return 1/depth;
 			} else {
-				return -1;
+				return -1/depth;
 			}
 		}
 		return 0;

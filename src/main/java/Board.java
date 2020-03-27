@@ -68,7 +68,7 @@ public class Board {
 	public boolean checkMove(int col) {
 		if (col < 1 || col > getWidth()) {
 			System.out.println("Bad input: choose a column from 1 to 7");
-			return false;
+			return false; 
 		}
 		if (grid[0][col - 1] != ".") {
 //			System.out.println("Full column! Try another one");
@@ -286,7 +286,7 @@ public class Board {
 		return turn;
 	}
 
-	public static int getMaxmoves() {
+	public static int getMaxMoves() {
 		return maxMoves;
 	}
 	
